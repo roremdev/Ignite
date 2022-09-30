@@ -23,6 +23,12 @@ jobs:
             }
 
       - run: echo ${{ toJSON(steps.branch.outputs.result) }}
+
+      - name: echo
+        env:
+          NAME: ${{ toJSON(steps.branch.outputs.result.name) }}
+        run: echo NAME
+
 #      - name: 🛠 Create branch
 #        uses: peterjgrainger/action-create-branch@v2.2.0
 #        env:
