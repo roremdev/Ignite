@@ -1,0 +1,72 @@
+# TODO - Validate Docker intermediate process
+# TODO - Structure resources in modules
+# TODO - Integrate release branch
+# TODO - Integrate feature branch
+terraform {
+  required_version = ">= 1.1.7"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "4.32.0"
+    }
+  }
+}
+
+provider "aws" {
+  region     = "us-east-1"
+  profile    = "terraform"
+}
+
+data "aws_iam_policy_document" "amplify" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["amplify.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "amplify" {
+  name               = "amplify"
+  assume_role_policy = data.aws_iam_policy_document.amplify.json
+}
+
+resource "aws_amplify_app" "application" {
+  name         = var.project.name
+  repository   = var.github.repository
+  access_token = var.github.access_token
+  build_spec   = file("./build.yml")
+
+  iam_service_role_arn = aws_iam_role.amplify.arn
+
+  enable_auto_branch_creation = true
+  enable_branch_auto_build    = true
+  enable_branch_auto_deletion = true
+  platform                    = "WEB"
+
+  custom_rule {
+    source = "/<*>"
+    status = "404"
+    target = "/index.html"
+  }
+
+  tags = {
+    application = var.project.name
+  }
+}
+
+resource "aws_amplify_branch" "environment" {
+  app_id       = aws_amplify_app.application.id
+  branch_name  = var.environment.branch
+  display_name = var.environment.prefix_domain
+
+  framework = "React"
+  stage     = var.environment.stage
+
+  environment_variables = {
+    MODE = var.environment.mode
+  }
+  depends_on = [aws_amplify_app.application]
+}
