@@ -1,5 +1,5 @@
-name: ChatOps
-
+name: Chat Ops
+# https://github.com/marketplace/actions/slash-command-dispatch
 on:
   issue_comment:
     types: [ created ]

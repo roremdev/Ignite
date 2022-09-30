@@ -1,20 +1,23 @@
-name: Help Command
+name: help-command
 on:
   repository_dispatch:
-    types: [ help-command ]
+    types: [help-command]
 jobs:
-  commands:
+  help:
     runs-on: ubuntu-latest
     steps:
-      - name: 🤖 Bot comment
+      - name: Update comment
         uses: peter-evans/create-or-update-comment@v2
         with:
           token: ${{ secrets.PAT }}
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
-          reaction-type: hooray
           body: |
-            #### 📖 Actions on ChatOps
-            > | Actions            | Description 
-            > | ------------------ | -------------------------------------------- 
-            > | `.provision <env>` | Provision current issue on an infrastructure. <br/> Environments: <br/> - development <br/> - feature
+            > Command | Description
+            > --- | ---
+            > /hello-world | Receive a greeting
+            > /hello-workflow | Receive a greeting (using workflow_dispatch)
+            > /ping [\<args\> ...] | Echos back a list of arguments
+            > /hello-world-local | Receive a greeting (local execution)
+            > /ping-local [\<args\> ...] | Echos back a list of arguments (local execution)
+          reaction-type: hooray
