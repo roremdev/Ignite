@@ -1,5 +1,7 @@
 .idea
 dist
+# nodejs
+.npmrc
 node_modules
 # terraform
 **/.terraform
