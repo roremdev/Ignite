@@ -1,7 +1,7 @@
 name: Provision
 on:
   repository_dispatch:
-    types: [provision-command]
+    types: [ provision-command ]
 jobs:
   help:
     runs-on: ubuntu-latest
@@ -22,12 +22,17 @@ jobs:
               feature
             }
 
-#      - run: echo ${{ toJSON(steps.branch.outputs.result) }}
+      #      - run: echo ${{ toJSON(steps.branch.outputs.result) }}
 
       - name: echo
         env:
+          BRANCH: ${{ toJSON(steps.branch.outputs.result) }}
           NAME: ${{ toJSON(steps.branch.outputs.result.name) }}
-        run: echo $NAME
+          FEATURE: ${{ toJSON(steps.branch.outputs.result.feature) }}
+        run: |
+          echo $BRANCH
+          echo $NAME
+          echo FEATURE
 
 #      - name: 🛠 Create branch
 #        uses: peterjgrainger/action-create-branch@v2.2.0
