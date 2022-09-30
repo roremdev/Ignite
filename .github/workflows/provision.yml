@@ -6,10 +6,6 @@ jobs:
   help:
     runs-on: ubuntu-latest
     steps:
-      - name:  🤖 Find Comment
-        uses: peter-evans/find-comment@v2
-        id: issue
-
       - name: ✍️ Branch name
         uses: actions/github-script@v6
         id: branch
@@ -17,7 +13,7 @@ jobs:
           result-encoding: string
           script: |
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
-            console.log(steps.issue.outputs)
+            console.log(github)
             const feature = kebabCase(context.payload.issue.title)
             const label = context.payload.issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
 
