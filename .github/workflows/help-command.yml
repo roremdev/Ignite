@@ -1,7 +1,7 @@
-name: Actions
+name: Help Command
 on:
   repository_dispatch:
-    types: [ actions-command ]
+    types: [ help-command ]
 jobs:
   commands:
     runs-on: ubuntu-latest
@@ -9,8 +9,10 @@ jobs:
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          reaction-type: hooray
           body: |
             #### 📖 Actions on ChatOps
             > | Actions            | Description 
