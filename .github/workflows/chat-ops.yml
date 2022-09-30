@@ -28,7 +28,7 @@ jobs:
   feature:
     needs:
       - chatops
-    if: needs.chatops.outputs.feature == 'true'
+    if: ${{ needs.chatops.outputs.feature == 'true' }}
     runs-on: ubuntu-latest
     #    environment: feature
     steps:
@@ -42,7 +42,7 @@ jobs:
   development:
     needs:
       - chatops
-    if: needs.chatops.outputs.development == 'true'
+    if: ${{ needs.chatops.outputs.development == 'true' }}
     runs-on: ubuntu-latest
     #    environment: feature
     steps:
