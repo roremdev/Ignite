@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 👋 ChatOps
-        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
         uses: NejcZdovc/comment-pr@v1
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
