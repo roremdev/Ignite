@@ -16,14 +16,14 @@ jobs:
           script: |
             const { ISSUE } = process.env
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
-            console.log(ISSUE)
-            const feature = kebabCase(context.payload.issue.title)
+            const feature = kebabCase(ISSUE.title)
             const label = context.payload.issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
 
             return { 
               name: `${label.name}/issue-${issueNumber}/${feature}`,
               feature
             }
+      - run: echo ${{ toJson(steps.branch.outputs.result) }}
 
       - name: 🛠 Create branch
         uses: peterjgrainger/action-create-branch@v2.2.0
