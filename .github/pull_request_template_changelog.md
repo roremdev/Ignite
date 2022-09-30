@@ -2,8 +2,8 @@
 name: Version
 about: Control Version
 title: ''
-labels: ''
-assignees: ''
+labels: 'test'
+assignees: '@roremdev'
 
 ---
 
