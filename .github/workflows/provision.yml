@@ -22,7 +22,7 @@ jobs:
               feature
             }
 
-      - run: echo ${{ toJSON(steps.branch.outputs.result) }}
+#      - run: echo ${{ toJSON(steps.branch.outputs.result) }}
 
       - name: echo
         env:
