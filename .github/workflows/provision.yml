@@ -24,7 +24,8 @@ jobs:
               name: `${label.name}/issue-${issue.number}/${feature}`,
               feature
             }
-      - run: echo ${{ toJson(steps.branch.outputs.result) }}
+      - run: echo ${{ steps.branch.outputs.result.name }}
+      - run: echo ${{ steps.branch.outputs.result.feature }}
 
 #      - name: 🛠 Create branch
 #        uses: peterjgrainger/action-create-branch@v2.2.0
