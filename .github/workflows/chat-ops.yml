@@ -16,7 +16,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          TRIGGER_PHRASE: ".provision"
+          TRIGGER_PHRASE: "/provision"
 
 #      - name: 🏷 Provision on development environment
 #        uses: machine-learning-apps/actions-chatops@master
