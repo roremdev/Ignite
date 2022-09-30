@@ -18,13 +18,12 @@ jobs:
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
             const feature = kebabCase(issue.title)
             const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
-            return `${label.name}/issue-${issue.number}/${feature}`
-#            return {
-#              name: `${label.name}/issue-${issue.number}/${feature}`,
-#              feature
-#            }
+            return {
+              name: `${label.name}/issue-${issue.number}/${feature}`,
+              feature
+            }
 
-      - run: echo ${{ steps.branch.outputs.result}}
+      - run: echo ${{ steps.branch.outputs.result.name}}
 #      - name: 🛠 Create branch
 #        uses: peterjgrainger/action-create-branch@v2.2.0
 #        env:
