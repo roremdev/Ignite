@@ -6,17 +6,22 @@ on:
 jobs:
   chatops:
     runs-on: ubuntu-latest
-    outputs:
-      feature: ${{ steps.feature.outputs.BOOL_TRIGGERED }}
-#      development: ${{ steps.development.outputs.BOOL_TRIGGERED }}
     steps:
       - name: 🏷 Provision on feature environment
         uses: machine-learning-apps/actions-chatops@master
-        id: feature
+        id: provision
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           TRIGGER_PHRASE: "/provision"
+
+      - name: 👋 Hello Response
+        if: ${{ steps.provision.outputs.BOOL_TRIGGERED == 'true' }}
+        uses: NejcZdovc/comment-pr@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          message: "Hello feature 👋"
 
 #      - name: 🏷 Provision on development environment
 #        uses: machine-learning-apps/actions-chatops@master
@@ -25,27 +30,6 @@ jobs:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #        with:
 #          TRIGGER_PHRASE: ".provision development"
-
-  outputs:
-    needs:
-      - chatops
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo feature=${{ needs.chatops.outputs.feature }}
-
-  feature:
-    needs:
-      - chatops
-    if: ${{ needs.chatops.outputs.feature == 'true' }}
-    runs-on: ubuntu-latest
-    #    environment: feature
-    steps:
-      - name: 👋 Hello Response
-        uses: NejcZdovc/comment-pr@v1
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        with:
-          message: "Hello feature 👋"
 
 #  development:
 #    needs:
