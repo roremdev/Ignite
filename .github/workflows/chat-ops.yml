@@ -1,22 +1,16 @@
 name: ChatOps
-on: [issue_comment]
+
+on:
+  issue_comment:
+    types: [ created ]
 
 jobs:
-  label-pr:
+  slashCommandDispatch:
     runs-on: ubuntu-latest
     steps:
-      - name: listen for PR Comments
-        uses: machine-learning-apps/actions-chatops@master
+      - name: Slash Command Dispatch
+        uses: peter-evans/slash-command-dispatch@v3
         with:
-          TRIGGER_PHRASE: "/provision"
-        env: # you must supply GITHUB_TOKEN
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: prcomm
-
-      - name: Hello
-        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        uses: NejcZdovc/comment-pr@v1
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        with:
-          message: "Hello world 👋"
+          token: ${{ secrets.PAT }}
+          commands: |
+            actions
