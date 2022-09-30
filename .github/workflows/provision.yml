@@ -10,7 +10,7 @@ jobs:
         uses: actions/github-script@v6
         id: branch
         env:
-          ISSUE: ${{ toJson(github.event.client_payload) }}
+          ISSUE: ${{ toJson(github.event.client_payload.issue) }}
         with:
           result-encoding: string
           script: |
