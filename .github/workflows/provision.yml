@@ -20,6 +20,9 @@ jobs:
             const feature = kebabCase(issue.title)
             const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
 
+            console.log(`${label.name}/issue-${issue.number}/${feature}`)
+            console.log(feature)
+
             return {
               name: `${label.name}/issue-${issue.number}/${feature}`,
               feature
