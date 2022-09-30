@@ -27,17 +27,8 @@ jobs:
               feature
             }
 
-      #      - run: echo ${{ toJSON(steps.branch.outputs.result) }}
-
-      - name: echo
-        env:
-          BRANCH: ${{ toJSON(steps.branch.outputs.result) }}
-          NAME: ${{ fromJSON(steps.branch.outputs.result.name) }}
-          FEATURE: ${{ fromJSON(steps.branch.outputs.result.feature) }}
-        run: |
-          echo $BRANCH
-          echo $NAME
-          echo $FEATURE
+      - run: echo ${{ toJSON(steps.branch.outputs.result) }}
+      - run: echo ${{ fromJSON(steps.branch.outputs.result.name) }}
 
 #      - name: 🛠 Create branch
 #        uses: peterjgrainger/action-create-branch@v2.2.0
