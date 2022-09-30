@@ -26,6 +26,8 @@ jobs:
           TRIGGER_PHRASE: ".provision development"
 
   feature:
+    needs:
+      - chatops
     if: needs.chatops.outputs.feature == 'true'
     runs-on: ubuntu-latest
     #    environment: feature
@@ -38,6 +40,8 @@ jobs:
           message: "Hello feature 👋"
 
   development:
+    needs:
+      - chatops
     if: needs.chatops.outputs.development == 'true'
     runs-on: ubuntu-latest
     #    environment: feature

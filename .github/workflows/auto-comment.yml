@@ -11,6 +11,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           issuesOpened: |
             #### 📖 Commands on ChatOps
-            | Command    | Description 
-            | ---------- | -------------------------------------------- 
-            | .provision <env> | Provision current issue on an infrastructure. <br/> Environments: <br/> - development <br/> - feature
+            > | Command            | Description 
+            > | ------------------ | -------------------------------------------- 
+            > | `.provision <env>` | Provision current issue on an infrastructure. <br/> Environments: <br/> - development <br/> - feature
