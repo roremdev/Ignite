@@ -7,21 +7,21 @@ jobs:
   chatops:
     runs-on: ubuntu-latest
     steps:
-      - name: 🏷 Provision on feature environment
+      - name: listen for PR Comments
         uses: machine-learning-apps/actions-chatops@master
-        id: provision
-        env:
+        env: # required
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          TRIGGER_PHRASE: "/provision"
+          TRIGGER_PHRASE: "/deploy"
+        id: prcomm
 
       - name: 👋 Hello Response
-        if: ${{ steps.provision.outputs.BOOL_TRIGGERED == 'true' }}
+        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
         uses: NejcZdovc/comment-pr@v1
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
-          message: "Hello feature 👋"
+          message: "Hello world 👋"
 
 #      - name: 🏷 Provision on development environment
 #        uses: machine-learning-apps/actions-chatops@master
