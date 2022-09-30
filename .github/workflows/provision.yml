@@ -16,13 +16,8 @@ jobs:
           script: |
             const issue = JSON.parse(process.env.ISSUE);
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
-            console.log(issue)
             const feature = kebabCase(issue.title)
             const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
-
-            console.log(`${label.name}/issue-${issue.number}/${feature}`)
-            console.log(feature)
-
             return {
               name: `${label.name}/issue-${issue.number}/${feature}`,
               feature
@@ -32,7 +27,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          branch: ${{ steps.branch.outputs.result.name }}
+          branch: ${{ toJson(steps.branch.outputs.result.name) }}
 
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
