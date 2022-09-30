@@ -1,8 +1,5 @@
-name: "ChatOps"
-# https://github.com/marketplace/actions/chatops-for-pull-requests
-# https://github.com/marketplace/actions/simple-comment-pr
-on:
-  [ issue_comment ]
+name: ChatOps
+on: [issue_comment]
 
 jobs:
   label-pr:
@@ -10,13 +7,13 @@ jobs:
     steps:
       - name: listen for PR Comments
         uses: machine-learning-apps/actions-chatops@master
-        env: # required
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          TRIGGER_PHRASE: "/deploy"
+          TRIGGER_PHRASE: "/provision"
+        env: # you must supply GITHUB_TOKEN
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: prcomm
 
-      - name: 👋 Hello Response
+      - name: Hello
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
         uses: NejcZdovc/comment-pr@v1
         env:
