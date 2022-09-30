@@ -1,17 +1,5 @@
----
-name: Version
-about: Control Version
-title: ''
-labels: 'test'
-assignees: '@roremdev'
-
----
-
-### ℹ️ Description
+#### ℹ️ Description
 > A little description of the reason for this Pull Request.
-
-#### 🏷 Jira ticket(s)
-- [PB-NUMBER](https://evo-nu.atlassian.net/browse/PB-NUMBER)
 
 **✨ Additions:**
 - Scope directory, ex. modules
@@ -23,5 +11,6 @@ assignees: '@roremdev'
 
 **🐛 Fixes:**
 - Scope directory, ex. dependency
-    - 💥 **severity: ↓ Low = Medium ↑ High**
+  - Commit message or activity related
+    - > 💥 **severity: ↓ Low = Medium ↑ High**
     - > Reason of the change as commit message or source of change
