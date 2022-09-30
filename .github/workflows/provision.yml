@@ -1,7 +1,7 @@
-name: Actions
+name: Provision
 on:
   repository_dispatch:
-    types: [actions-command]
+    types: [provision-command]
 jobs:
   help:
     runs-on: ubuntu-latest
@@ -11,9 +11,6 @@ jobs:
         with:
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
-          reaction-type: laugh
+          reaction-type: rocket
           body: |
-            #### 📖 Commands on ChatOps
-            > | Command            | Description
-            > | ------------------ | -------------------------------------------- 
-            > | `/provision env=` | Provision infrastructure on an environment specified.
+            #### 🏗 Provision on ${{ github.event.client_payload.slash_command.args.named.env }}
