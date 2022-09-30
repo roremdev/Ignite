@@ -1,10 +1,11 @@
 name: "ChatOps"
+# https://github.com/marketplace/actions/chatops-for-pull-requests
+# https://github.com/marketplace/actions/simple-comment-pr
 on:
-  issue_comment:
-    types: [created]
+  [ issue_comment ]
 
 jobs:
-  chatops:
+  label-pr:
     runs-on: ubuntu-latest
     steps:
       - name: listen for PR Comments
@@ -22,25 +23,3 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
           message: "Hello world 👋"
-
-#      - name: 🏷 Provision on development environment
-#        uses: machine-learning-apps/actions-chatops@master
-#        id: development
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          TRIGGER_PHRASE: ".provision development"
-
-#  development:
-#    needs:
-#      - chatops
-#    if: ${{ needs.chatops.outputs.development == 'true' }}
-#    runs-on: ubuntu-latest
-#    #    environment: feature
-#    steps:
-#      - name: 👋 Hello Response
-#        uses: NejcZdovc/comment-pr@v1
-#        env:
-#          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-#        with:
-#          message: "Hello development 👋"
