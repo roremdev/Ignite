@@ -1,8 +1,8 @@
 name: Chat Ops
 
 on:
-  issue_comment:
-    types: [ created ]
+  issues:
+    types: [ opened ]
 
 jobs:
   slashCommandDispatch:
