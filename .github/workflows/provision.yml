@@ -13,7 +13,7 @@ jobs:
           result-encoding: string
           script: |
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
-            
+            console.log(context)
             const feature = kebabCase(context.payload.issue.title)
             const label = context.payload.issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
 
