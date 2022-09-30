@@ -1,5 +1,5 @@
-name: Chat Ops
-# https://github.com/marketplace/actions/slash-command-dispatch
+name: ChatOps
+
 on:
   issue_comment:
     types: [ created ]
@@ -8,9 +8,10 @@ jobs:
   slashCommandDispatch:
     runs-on: ubuntu-latest
     steps:
-      - name: Slash Command Dispatch
+      - name: 🛠 Slash Command Dispatch
         uses: peter-evans/slash-command-dispatch@v3
         with:
           token: ${{ secrets.PAT }}
+          reactions: false
           commands: |
-            help
+            actions
