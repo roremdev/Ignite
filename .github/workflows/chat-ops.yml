@@ -25,6 +25,13 @@ jobs:
         with:
           TRIGGER_PHRASE: ".provision development"
 
+  outputs:
+    needs:
+      - chatops
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{needs.chatops.outputs.feature}} ${{needs.job1.outputs.development}}
+
   feature:
     needs:
       - chatops
