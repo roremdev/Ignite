@@ -10,13 +10,12 @@ jobs:
         uses: actions/github-script@v6
         id: branch
         env:
-          ISSUE: ${{ toJson(github.event.client_payload.github.payload.issue) }}
+          ISSUE: ${{ github.event.client_payload.github.payload.issue.title }}
         with:
           result-encoding: string
           script: |
             const { ISSUE } = process.env
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
-            console.log(ISSUE.title)
             console.log(ISSUE)
 #            const feature = kebabCase(ISSUE.title)
 #            const label = context.payload.issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
