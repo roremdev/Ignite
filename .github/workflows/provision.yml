@@ -18,25 +18,28 @@ jobs:
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
             const feature = kebabCase(issue.title)
             const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
-            return {
-              name: `${label.name}/issue-${issue.number}/${feature}`,
-              feature
-            }
-      - name: 🛠 Create branch
-        uses: peterjgrainger/action-create-branch@v2.2.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          branch: ${{ toJson(steps.branch.outputs.result.name) }}
+            return `${label.name}/issue-${issue.number}/${feature}`
+#            return {
+#              name: `${label.name}/issue-${issue.number}/${feature}`,
+#              feature
+#            }
 
-      - name: 🤖 Bot comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
-          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
-          reaction-type: rocket
-          body: |
-            #### ℹ️ Provision infrastructure
-            - ✨Environment: ${{ github.event.client_payload.slash_command.args.named.env }}
-            - 🚧Branch: ${{ steps.branch.outputs.result.name }}
-            - 📌Feature: ${{ steps.branch.outputs.result.feature }}
+      - run: echo "::debug::{steps.branch.outputs.result}"
+#      - name: 🛠 Create branch
+#        uses: peterjgrainger/action-create-branch@v2.2.0
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          branch: ${{ toJson(steps.branch.outputs.result.name) }}
+#
+#      - name: 🤖 Bot comment
+#        uses: peter-evans/create-or-update-comment@v2
+#        with:
+#          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+#          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+#          reaction-type: rocket
+#          body: |
+#            #### ℹ️ Provision infrastructure
+#            - ✨Environment: ${{ github.event.client_payload.slash_command.args.named.env }}
+#            - 🚧Branch: ${{ steps.branch.outputs.result.name }}
+#            - 📌Feature: ${{ steps.branch.outputs.result.feature }}
