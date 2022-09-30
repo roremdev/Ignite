@@ -24,7 +24,7 @@ jobs:
 #              feature
 #            }
 
-      - run: echo "::debug::{steps.branch.outputs.result}"
+      - run: echo ${{ steps.branch.outputs.result}}
 #      - name: 🛠 Create branch
 #        uses: peterjgrainger/action-create-branch@v2.2.0
 #        env:
