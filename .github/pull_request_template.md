@@ -12,5 +12,5 @@
 **🐛 Fixes:**
 - Scope directory, ex. dependency
   - Commit message or activity related
-    - > 💥 **severity: ↓ Low = Medium ↑ High**
+    - 💥 **Severity: ↓ Low = Medium ↑ High**
     - > Reason of the change as commit message or source of change
