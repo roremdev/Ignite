@@ -27,12 +27,12 @@ jobs:
       - name: echo
         env:
           BRANCH: ${{ toJSON(steps.branch.outputs.result) }}
-          NAME: ${{ toJSON(steps.branch.outputs.result.name) }}
-          FEATURE: ${{ toJSON(steps.branch.outputs.result.feature) }}
+          NAME: ${{ fromJSON(steps.branch.outputs.result.name) }}
+          FEATURE: ${{ fromJSON(steps.branch.outputs.result.feature) }}
         run: |
           echo $BRANCH
           echo $NAME
-          echo FEATURE
+          echo $FEATURE
 
 #      - name: 🛠 Create branch
 #        uses: peterjgrainger/action-create-branch@v2.2.0
