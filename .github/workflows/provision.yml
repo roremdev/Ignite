@@ -41,8 +41,7 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
           body: |
-            <details><summary>🏗 Provision infrastructure</summary>
-            - 🪴 **Environment:** ${{ github.event.client_payload.slash_command.args.named.env }}
-            - 🚧 **Branch:** ${{ fromJSON(steps.branch.outputs.result).name }}
-            - 🏷 **Feature:** ${{ fromJSON(steps.branch.outputs.result).feature }}
-            </details>
+            #### 🏗 Provisioned infrastructure
+            - 🪴 Environment: **${{ github.event.client_payload.slash_command.args.named.env }}**
+            - 🚧 Branch: **${{ fromJSON(steps.branch.outputs.result).name }}**
+            - 🏷 Feature: **${{ fromJSON(steps.branch.outputs.result).feature }}**
