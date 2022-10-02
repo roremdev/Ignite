@@ -49,7 +49,7 @@ jobs:
         run: |
           terraform plan \
           -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
-          -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}
+          -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}"
 
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
@@ -59,11 +59,12 @@ jobs:
           reaction-type: rocket
           body: |
             #### 🏗 Provisioned infrastructure on **${{ github.event.client_payload.slash_command.args.named.env }}**
+            - 🚧 Plan finished ${{ steps.terraform_plan.outcome }}
             
             <details>
               <summary>
             
-              #### 📖 Terraform plan
+              #### 📖 Summary
               </summary>
             
               ${{ steps.terraform_plan.outputs.stdout }}
