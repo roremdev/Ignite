@@ -66,5 +66,5 @@ jobs:
               #### 📖 Terraform plan
               </summary>
               
-              ${{ steps.terraform_plan.outputs.stdout }
+              ${{ steps.terraform_plan.outputs.stdout }}
             </details>
