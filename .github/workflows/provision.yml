@@ -47,9 +47,7 @@ jobs:
         id: terraform_plan
         working-directory: ./aws
         run: |
-          terraform plan 
-          -var='env_branch="${{steps.branch.outputs.branch_name}}"'
-          -var='prefix_domain="${{ steps.feature_name.outputs.result }}"'
+          terraform plan -var="env_branch=${{ steps.branch.outputs.branch_name }}" -var="env_prefix_domain=${{ steps.feature_name.outputs.result }}
 
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
@@ -62,9 +60,9 @@ jobs:
             
             <details>
               <summary>
-              
+            
               #### 📖 Terraform plan
               </summary>
-              
+            
               ${{ steps.terraform_plan.outputs.stdout }}
             </details>
