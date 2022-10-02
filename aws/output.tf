@@ -15,8 +15,3 @@ output "env_domain" {
   description = "Environment domain"
   value       = "https://${aws_amplify_branch.environment.display_name}.${aws_amplify_app.application.default_domain}"
 }
-
-output "env_branch" {
-  description = "Environment domain"
-  value       = "https://${aws_amplify_branch.environment.display_name}.${aws_amplify_app.application.default_domain}"
-}

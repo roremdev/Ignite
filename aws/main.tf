@@ -5,7 +5,7 @@
 # - Frontend application definition and its branch settings
 
 provider "aws" {
-  region     = var.region
+  region = var.region
 }
 
 data "aws_iam_policy_document" "amplify" {
@@ -53,10 +53,6 @@ resource "aws_amplify_branch" "environment" {
   display_name = var.env_prefix_domain
 
   framework = "React"
-  stage     = var.env_stage
 
-  environment_variables = {
-    MODE = var.env_mode
-  }
   depends_on = [aws_amplify_app.application]
 }

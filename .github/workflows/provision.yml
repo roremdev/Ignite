@@ -6,6 +6,16 @@ jobs:
   help:
     runs-on: ubuntu-latest
     steps:
+      - name: ⚙️ Configure GitHub Actions
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+
+      - name: ⚙️ Configure Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
       - name: ✍️ Branch name
         uses: actions/github-script@v6
         id: branch
@@ -17,11 +27,6 @@ jobs:
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
             const feature = kebabCase(issue.title)
             const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
-            console.log({
-              name: `${label.name}/issue-${issue.number}/${feature}`,
-              feature
-            })
-            
             return {
               name: `${label.name}/issue-${issue.number}/${feature}`,
               feature
@@ -34,6 +39,18 @@ jobs:
         with:
           branch: ${{ fromJSON(steps.branch.outputs.result).name }}
 
+      - name: 🛠 Initialize Terraform
+        working-directory: ./aws
+        run: terraform init
+
+      - name: 🏗 Provision Infrastructure
+        id: terraform_plan
+        working-directory: ./aws
+        run: |
+          terraform plan 
+          -var='env_branch="${{steps.branch.outputs.branch_name}}"'
+          -var='prefix_domain="${{ steps.feature_name.outputs.result }}"'
+
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
         with:
@@ -41,7 +58,13 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
           body: |
-            #### 🏗 Provisioned infrastructure
-            - 🪴 Environment: **${{ github.event.client_payload.slash_command.args.named.env }}**
-            - 🚧 Branch: **${{ fromJSON(steps.branch.outputs.result).name }}**
-            - 🏷 Feature: **${{ fromJSON(steps.branch.outputs.result).feature }}**
+            #### 🏗 Provisioned infrastructure on **${{ github.event.client_payload.slash_command.args.named.env }}**
+            
+            <details>
+              <summary>
+              
+              #### 📖 Terraform plan
+              </summary>
+              
+              ${{ steps.terraform_plan.outputs.stdout }
+            </details>

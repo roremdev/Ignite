@@ -6,11 +6,6 @@ variable "region" {
   default     = "us-east-1"
 }
 
-variable "profile" {
-  description = "AWS profile reference"
-  default = null
-}
-
 variable "project" {
   description = "AWS project name"
   default     = "ignite"
@@ -32,13 +27,4 @@ variable "env_branch" {
 variable "env_prefix_domain" {
   description = "Environment domain name"
   default = null
-}
-
-variable "env_stage" {
-  description = "Type of AWS Amplify provision application"
-}
-
-variable "env_mode" {
-  description = "Mode of launching project"
-  default     = "development"
 }
