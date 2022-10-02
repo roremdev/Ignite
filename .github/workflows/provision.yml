@@ -28,7 +28,7 @@ jobs:
             const feature = kebabCase(issue.title)
             const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
             return {
-              name: `${label.name}/issue-${issue.number}/${feature}`,
+              branch: `${label.name}/issue-${issue.number}/${feature}`,
               feature
             }
 
@@ -37,7 +37,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          branch: ${{ fromJSON(steps.branch.outputs.result).name }}
+          branch: ${{ fromJSON(steps.branch.outputs.result).branch }}
 
       - name: 🛠 Initialize Terraform
         working-directory: ./aws
@@ -47,7 +47,9 @@ jobs:
         id: terraform_plan
         working-directory: ./aws
         run: |
-          terraform plan -var="env_branch=${{ steps.branch.outputs.branch_name }}" -var="env_prefix_domain=${{ steps.feature_name.outputs.result }}
+          terraform plan \
+          -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
+          -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}
 
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
