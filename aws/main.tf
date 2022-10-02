@@ -1,21 +1,11 @@
-# TODO - Validate Docker intermediate process
-# TODO - Structure resources in modules
-# TODO - Integrate release branch
-# TODO - Integrate feature branch
-terraform {
-  required_version = ">= 1.1.7"
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "4.32.0"
-    }
-  }
-}
+# ℹ️ Description
+# Specifies the AWS provider, a provider plugin that Terraform will use to manage your AWS resources.
+# The configuration defines:
+# - IAM Policy and Role as Amplify resource
+# - Frontend application definition and its branch settings
 
 provider "aws" {
-  region     = "us-east-1"
-  profile    = "terraform"
+  region     = var.region
 }
 
 data "aws_iam_policy_document" "amplify" {
@@ -34,9 +24,9 @@ resource "aws_iam_role" "amplify" {
 }
 
 resource "aws_amplify_app" "application" {
-  name         = var.project.name
-  repository   = var.github.repository
-  access_token = var.github.access_token
+  name         = var.project
+  repository   = var.gh_repository
+  access_token = var.gh_access_token
   build_spec   = file("./build.yml")
 
   iam_service_role_arn = aws_iam_role.amplify.arn
@@ -53,20 +43,20 @@ resource "aws_amplify_app" "application" {
   }
 
   tags = {
-    application = var.project.name
+    application = var.project
   }
 }
 
 resource "aws_amplify_branch" "environment" {
   app_id       = aws_amplify_app.application.id
-  branch_name  = var.environment.branch
-  display_name = var.environment.prefix_domain
+  branch_name  = var.env_branch
+  display_name = var.env_prefix_domain
 
   framework = "React"
-  stage     = var.environment.stage
+  stage     = var.env_stage
 
   environment_variables = {
-    MODE = var.environment.mode
+    MODE = var.env_mode
   }
   depends_on = [aws_amplify_app.application]
 }

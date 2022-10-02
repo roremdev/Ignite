@@ -1,16 +1,22 @@
-output "amplify" {
-  description = "Amplify application"
-  value       = {
-    name   = aws_amplify_app.application.name
-    domain = "https://${aws_amplify_app.application.default_domain}"
-  }
+# ℹ️ Description
+# Defines the information about your infrastructure that Terraform Cloud will display to you when it makes changes.
+
+output "app_name" {
+  description = "Application name"
+  value       = aws_amplify_app.application.name
 }
 
-output "amplify_environment" {
-  description = "Amplify environments"
-  value       = {
-    domain             = "https://${aws_amplify_branch.environment.display_name}.${aws_amplify_app.application.default_domain}"
-    destination_branch = aws_amplify_branch.environment.destination_branch
-    source_branch      = aws_amplify_branch.environment.source_branch
-  }
+output "app_domain" {
+  description = "Application domain"
+  value       = "https://${aws_amplify_app.application.default_domain}"
+}
+
+output "env_domain" {
+  description = "Environment domain"
+  value       = "https://${aws_amplify_branch.environment.display_name}.${aws_amplify_app.application.default_domain}"
+}
+
+output "env_branch" {
+  description = "Environment domain"
+  value       = "https://${aws_amplify_branch.environment.display_name}.${aws_amplify_app.application.default_domain}"
 }

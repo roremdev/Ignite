@@ -1,38 +1,44 @@
+# ℹ️ Description
+# Defines the input variables that are referenced in main.tf, which make the configuration customizable.
+
+variable "region" {
+  description = "AWS region"
+  default     = "us-east-1"
+}
+
+variable "profile" {
+  description = "AWS profile reference"
+  default = null
+}
+
 variable "project" {
-  description = "AWS Amplify Information"
-  nullable    = false
-
-  type = object({
-    name   = string
-    region = string
-  })
-  default = {
-    name   = "ignite"
-    region = "us-east-1"
-  }
+  description = "AWS project name"
+  default     = "ignite"
 }
 
-variable "github" {
-  description = "GitHub information repository"
-  nullable    = false
-
-  type = object({
-    repository   = string
-    access_token = string
-  })
-  default = {
-    repository   = ""
-    access_token = ""
-  }
+variable "gh_repository" {
+  description = "Github repository"
 }
 
-variable "environment" {
-  description = "Application Environment Definition"
+variable "gh_access_token" {
+  description = "Github access token"
+}
 
-  type = object({
-    branch        = string
-    prefix_domain = string
-    stage         = string
-    mode          = string
-  })
+variable "env_branch" {
+  description = "Environment branch listener"
+  default     = "development"
+}
+
+variable "env_prefix_domain" {
+  description = "Environment domain name"
+  default = null
+}
+
+variable "env_stage" {
+  description = "Type of AWS Amplify provision application"
+}
+
+variable "env_mode" {
+  description = "Mode of launching project"
+  default     = "development"
 }
