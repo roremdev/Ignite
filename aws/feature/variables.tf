@@ -6,23 +6,8 @@ variable "region" {
   default     = "us-east-1"
 }
 
-variable "project" {
-  description = "AWS project name"
-  default     = "ignite"
-}
-
 variable "app_id" {
   description = "AWS Amplify id"
-  default     = null
-}
-
-variable "gh_repository" {
-  description = "Github repository"
-  default     = "https://github.com/roremdev/Ignite"
-}
-
-variable "gh_access_token" {
-  description = "Github access token"
 }
 
 variable "env_feature" {

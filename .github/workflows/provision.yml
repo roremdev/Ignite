@@ -40,33 +40,35 @@ jobs:
           branch: ${{ fromJSON(steps.branch.outputs.result).branch }}
 
       - name: 🛠 Initialize Terraform
-        working-directory: ./aws
+        working-directory: ./aws/feature
         run: terraform init
 
       - name: ♻️ Workspace
-        working-directory: ./aws
+        working-directory: ./aws/feature
         run: terraform workspace new ${{ fromJSON(steps.branch.outputs.result).feature }}
 
       - name: 📚 Terraform plan
         id: terraform_plan
-        working-directory: ./aws
+        working-directory: ./aws/feature
         run: |
           terraform plan -input=false \
           -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
-          -var="env_feature=${{ fromJSON(steps.branch.outputs.result).feature }}"
+          -var="env_feature=${{ fromJSON(steps.branch.outputs.result).feature }}" \
+          -var="app_id=${{ github.event.client_payload.slash_command.args.named.app_id }}
 
       - name: 🏗 Provision Infrastructure
         id: terraform_apply
-        working-directory: ./aws
+        working-directory: ./aws/feature
         run: |
           terraform apply -auto-approve \
           -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
-          -var="env_feature=${{ fromJSON(steps.branch.outputs.result).feature }}"
+          -var="env_feature=${{ fromJSON(steps.branch.outputs.result).feature }}" \
+          -var="app_id=${{ github.event.client_payload.slash_command.args.named.app_id }}
 
-      - name: 📚 Terraform output
-        id: terraform_output
-        working-directory: ./aws
-        run: terraform output -no-color
+#      - name: 📚 Terraform output
+#        id: terraform_output
+#        working-directory: ./aws
+#        run: terraform output -no-color
 
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
@@ -79,7 +81,7 @@ jobs:
             - 🚧 Plan finished `${{ steps.terraform_plan.outcome }}`
             - 🚧 Apply finished `${{ steps.terraform_apply.outcome }}`
 
-            #### 📖 Workspace outputs
-            ```
-            ${{ steps.terraform_output.outputs.stdout }}"
-            ```
+#            #### 📖 Workspace outputs
+#            ```
+#            ${{ steps.terraform_output.outputs.stdout }}
+#            ```

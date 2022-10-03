@@ -14,6 +14,6 @@ jobs:
           reaction-type: laugh
           body: |
             #### 📖 Commands on ChatOps
-            > | Command            | Description
-            > | ------------------ | -------------------------------------------- 
-            > | `/provision env=` | Provision infrastructure on an environment specified.
+            > | Command              | Description
+            > | -------------------- | -------------------------------------------- 
+            > | `/provision app_id=` | Provision infrastructure on an environment specified.

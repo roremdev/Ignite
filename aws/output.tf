@@ -6,6 +6,11 @@ output "iam_role" {
   value       = aws_iam_role.amplify.name
 }
 
+output "amplify_id" {
+  description = "Amplify id"
+  value       = aws_amplify_app.application.id
+}
+
 output "app_domain" {
   description = "Application domain"
   value       = "https://${aws_amplify_app.application.default_domain}"
