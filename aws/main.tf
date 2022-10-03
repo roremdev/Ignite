@@ -50,7 +50,7 @@ resource "aws_amplify_app" "application" {
 resource "aws_amplify_branch" "environment" {
   app_id       = aws_amplify_app.application.id
   branch_name  = var.env_branch
-  display_name = var.env_prefix_domain
+  display_name = var.env_feature
 
   framework = "React"
 
