@@ -14,6 +14,7 @@ jobs:
       - name: ⚙️ Configure Terraform
         uses: hashicorp/setup-terraform@v2
         with:
+          terraform_wrapper: true
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: ✍️ Branch name
@@ -44,12 +45,18 @@ jobs:
         run: terraform init
 
       - name: 🏗 Provision Infrastructure
-        id: terraform_plan
+        id: terraform_apply
         working-directory: ./aws
         run: |
-          terraform plan \
+          terraform apply -auto-approve \
           -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
           -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}"
+
+      - id: terraform_output
+        working-directory: ./aws
+        run: |
+          output=$(terraform output test)
+          echo $output
 
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
@@ -59,7 +66,8 @@ jobs:
           reaction-type: rocket
           body: |
             #### 🏗 Provisioned infrastructure on **${{ github.event.client_payload.slash_command.args.named.env }}**
-            - 🚧 Plan finished ${{ steps.terraform_plan.outcome }}
+            - 🚧 Plan finished `${{ steps.terraform_plan.outcome }}`
+            - 🚧 Apply finished `${{ steps.terraform_plan.outcome }}`
             
             <details>
               <summary>
@@ -68,6 +76,6 @@ jobs:
               </summary>
               
               ```
-              ${{ steps.terraform_plan.outputs.stdout }}
+              ${{ steps.terraform_output.outputs.stdout }}
               ```
             </details>
