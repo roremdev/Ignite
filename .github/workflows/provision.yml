@@ -32,24 +32,24 @@ jobs:
               feature
             }
 
-      - name: 🛠 Create branch
-        uses: peterjgrainger/action-create-branch@v2.2.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          branch: ${{ fromJSON(steps.branch.outputs.result).branch }}
-
-      - name: 🛠 Initialize Terraform
-        working-directory: ./aws
-        run: terraform init
-
-      - name: 🏗 Provision Infrastructure
-        id: terraform_apply
-        working-directory: ./aws
-        run: |
-          terraform apply -auto-approve \
-          -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
-          -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}"
+#      - name: 🛠 Create branch
+#        uses: peterjgrainger/action-create-branch@v2.2.0
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          branch: ${{ fromJSON(steps.branch.outputs.result).branch }}
+#
+#      - name: 🛠 Initialize Terraform
+#        working-directory: ./aws
+#        run: terraform init
+#
+#      - name: 🏗 Provision Infrastructure
+#        id: terraform_apply
+#        working-directory: ./aws
+#        run: |
+#          terraform apply -auto-approve \
+#          -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
+#          -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}"
 
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
@@ -69,6 +69,6 @@ jobs:
               </summary>
               
               ```
-              ${{ steps.terraform_output.outputs.stdout }}
+#              ${{ steps.terraform_output.outputs.stdout }}
               ```
             </details>
