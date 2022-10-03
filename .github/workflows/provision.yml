@@ -55,7 +55,7 @@ jobs:
       - id: terraform_output
         working-directory: ./aws
         run: |
-          output=$(terraform output test)
+          output=$(terraform output)
           echo $output
 
       - name: 🤖 Bot comment
