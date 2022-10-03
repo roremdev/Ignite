@@ -62,13 +62,13 @@ jobs:
             - 🚧 Plan finished `${{ steps.terraform_plan.outcome }}`
             - 🚧 Apply finished `${{ steps.terraform_plan.outcome }}`
             
-            <details>
-              <summary>
-            
-              #### 📖 Summary
-              </summary>
+#            <details>
+#              <summary>
+#
+#              #### 📖 Summary
+#              </summary>
               
-              ```
+#              ```
 #              ${{ steps.terraform_output.outputs.stdout }}
-              ```
-            </details>
+#              ```
+#            </details>
