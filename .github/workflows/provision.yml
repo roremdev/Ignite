@@ -47,7 +47,7 @@ jobs:
         id: terraform_plan
         working-directory: ./aws
         run: |
-          terraform plan -auto-approve \
+          terraform plan -no-color -input=false \
           -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
           -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}"
 
@@ -69,3 +69,14 @@ jobs:
             🏗 Feature **${{ fromJSON(steps.branch.outputs.result).feature }}** on **${{ fromJSON(steps.branch.outputs.result).branch }}**
             - 🚧 Plan finished `${{ steps.terraform_plan.outcome }}`
             - 🚧 Apply finished `${{ steps.terraform_apply.outcome }}`
+
+            <details>
+              <summary>
+            
+              #### 📖 Show Plan
+              </summary>
+              
+              ```
+              ${{ steps.terraform_plan.outputs.stdout }}"
+              ```
+            </details>
