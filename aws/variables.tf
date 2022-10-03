@@ -20,6 +20,11 @@ variable "gh_access_token" {
   description = "Github access token"
 }
 
+variable "env_feature" {
+  description = "Environment feature post-fix"
+  default     = "development"
+}
+
 variable "env_branch" {
   description = "Environment branch listener"
   default     = "development"
