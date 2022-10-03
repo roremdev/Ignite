@@ -53,7 +53,8 @@ jobs:
         run: |
           terraform plan -input=false \
           -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
-          -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}"
+          -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}"\
+          -var="env_feature=${{ fromJSON(steps.branch.outputs.result).feature }}"
 
       - name: 🏗 Provision Infrastructure
         id: terraform_apply
@@ -61,7 +62,8 @@ jobs:
         run: |
           terraform apply -auto-approve \
           -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
-          -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}"
+          -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}" \
+          -var="env_feature=${{ fromJSON(steps.branch.outputs.result).feature }}"
 
       - name: 📚 Terraform output
         id: terraform_output
