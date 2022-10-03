@@ -8,7 +8,7 @@ terraform {
     organization = "threepoints"
 
     workspaces {
-      name = "ignite"
+      tags = ["ignite", "frontend"]
     }
   }
 
