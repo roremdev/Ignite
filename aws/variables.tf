@@ -13,6 +13,7 @@ variable "project" {
 
 variable "gh_repository" {
   description = "Github repository"
+  default = "https://github.com/roremdev/Ignite"
 }
 
 variable "gh_access_token" {
