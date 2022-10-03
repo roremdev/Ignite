@@ -1,9 +1,9 @@
-name: Provision
+name: "Provision Infrastructure"
 on:
   repository_dispatch:
     types: [ provision-command ]
 jobs:
-  help:
+  provision:
     runs-on: ubuntu-latest
     steps:
       - name: ⚙️ Configure GitHub Actions
@@ -14,7 +14,6 @@ jobs:
       - name: ⚙️ Configure Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_wrapper: true
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: ✍️ Branch name
@@ -52,12 +51,6 @@ jobs:
           -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
           -var="env_prefix_domain=${{ fromJSON(steps.branch.outputs.result).feature }}"
 
-      - id: terraform_output
-        working-directory: ./aws
-        run: |
-          output=$(terraform output)
-          echo $output
-
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
         with:
@@ -65,7 +58,7 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
           body: |
-            #### 🏗 Provisioned infrastructure on **${{ github.event.client_payload.slash_command.args.named.env }}**
+            #### 🏗 Feature fromJSON(steps.branch.outputs.result).feature on **${{ fromJSON(steps.branch.outputs.result).branch }}**
             - 🚧 Plan finished `${{ steps.terraform_plan.outcome }}`
             - 🚧 Apply finished `${{ steps.terraform_plan.outcome }}`
             
