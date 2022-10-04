@@ -24,22 +24,19 @@ jobs:
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
             return kebabCase(process.env.ISSUE_TITLE)
 
-      - name: ✍️ Name of branch
-        uses: actions/github-script@v6
-        id: branch
-        env:
-          ISSUE_LABELS: ${{ github.event.issue }}
-        with:
-          result-encoding: string
-          script: |
-            console.log(process.env.ISSUE_LABELS)
-#            const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
-#            const labels = JSON.parse(process.env.ISSUE_LABELS)
-#            console.log(labels)
-#            const label = labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
-#            return `${label.name}/issue-${issue.number}/${feature}`
+      - run: echo ${{ github.event.issue }}
 
-      - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
+#      - name: ✍️ Name of branch
+#        uses: actions/github-script@v6
+#        id: branch
+#        env:
+#          ISSUE_LABELS: ${{ github.event.issue }}
+#        with:
+#          result-encoding: string
+#          script: |
+#            console.log(process.env.ISSUE_LABELS)
+
+#      - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
 
 #  terraform:
 #    runs-on: ubuntu-latest
