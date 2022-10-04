@@ -24,34 +24,35 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
-            return kebabCase(JSON.parse(process.env.ISSUE_TITLE))
+            console.log(process.env.ISSUE_TITLE)
+#            const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
+#            return kebabCase(JSON.parse(process.env.ISSUE_TITLE))
 
-  terraform:
-    runs-on: ubuntu-latest
-    needs: [ reference ]
-    environment: Amplify
-
-    steps:
-      - name: ⚙️ Configure GitHub Actions
-        uses: actions/checkout@v3
-
-      - name: ⚙️ Configure Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
-      - name: 🚧 Defining environment context
-        run: |
-          mkdir .terraform
-          cd .terraform
-          echo ${{ needs.reference.outputs.workspace }} >> environment
-
-      - name: 🛠 Terraform operations
-        working-directory: ./aws/feature
-        run: |
-          terraform init
-          terraform destroy -auto-approve
+#  terraform:
+#    runs-on: ubuntu-latest
+#    needs: [ reference ]
+#    environment: Amplify
+#
+#    steps:
+#      - name: ⚙️ Configure GitHub Actions
+#        uses: actions/checkout@v3
+#
+#      - name: ⚙️ Configure Terraform
+#        uses: hashicorp/setup-terraform@v2
+#        with:
+#          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+#
+#      - name: 🚧 Defining environment context
+#        run: |
+#          mkdir .terraform
+#          cd .terraform
+#          echo ${{ needs.reference.outputs.workspace }} >> environment
+#
+#      - name: 🛠 Terraform operations
+#        working-directory: ./aws/feature
+#        run: |
+#          terraform init
+#          terraform destroy -auto-approve
 #           -var="app_id=${{ steps.terraform_output.outputs.stdout }}"
 #         terraform workspace select development
 #         terraform workspace delete ${{ fromJSON(steps.branch.outputs.result).feature }}
