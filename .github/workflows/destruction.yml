@@ -1,61 +1,57 @@
 name: "Destruction Infrastructure"
+
 on:
   issues:
-    types: [closed]
+    types: [ closed ]
+
+defaults:
+  run:
+    working-directory: ./aws/feature
+
 jobs:
-  destruction:
+  reference:
     runs-on: ubuntu-latest
+
+    outputs:
+      workspace: ${{ steps.feature.outputs.result }}
+
+    steps:
+      - name: ✍️ Name of workspace
+        uses: actions/github-script@v6
+        id: feature
+        env:
+          ISSUE_TITLE: ${{ fromJSON(github.event.issue).title }}
+        with:
+          result-encoding: string
+          script: |
+            const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
+            return kebabCase(JSON.parse(process.env.ISSUE_TITLE))
+
+  terraform:
+    runs-on: ubuntu-latest
+    needs: [ reference ]
+    environment: Amplify
+
     steps:
       - name: ⚙️ Configure GitHub Actions
         uses: actions/checkout@v3
-        with:
-          fetch-depth: '0'
 
       - name: ⚙️ Configure Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: ✍️ Branch name
-        uses: actions/github-script@v6
-        id: branch
-        env:
-          ISSUE: ${{ toJson(github.event.issue) }}
-        with:
-          result-encoding: string
-          script: |
-            const issue = JSON.parse(process.env.ISSUE);
-            const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
-            const feature = kebabCase(issue.title)            
-            console.log(feature)            
-            return feature
-
-      - working-directory: ./aws/feature
+      - name: 🚧 Defining environment context
         run: |
           mkdir .terraform
           cd .terraform
-          echo ${{ steps.branch.outputs.result }} >> environment
+          echo ${{ needs.reference.outputs.workspace }} >> environment
 
-      - name: 🛠 Initialize Terraform
-        working-directory: ./aws/feature
-        run: terraform init
-
-      - name: 🛠 Initialize Terraform
-        id: terraform_output
-        working-directory: ./aws/feature
-        run: terraform output amplify_id
-
-      - name: 🏗 Destruction Infrastructure
-        id: terraform_apply
+      - name: 🛠 Terraform operations
         working-directory: ./aws/feature
         run: |
-          terraform destroy -auto-approve \
-          -var="app_id=${{ steps.terraform_output.outputs.stdout }}"
-
-      - name: ♻️ Workspace
-        working-directory: ./aws/feature
-        run: terraform workspace select development
-
-      - name: ♻️ Workspace
-        working-directory: ./aws/feature
-        run: terraform workspace delete ${{ fromJSON(steps.branch.outputs.result).feature }}
+          terraform init
+          terraform destroy -auto-approve
+#           -var="app_id=${{ steps.terraform_output.outputs.stdout }}"
+#         terraform workspace select development
+#         terraform workspace delete ${{ fromJSON(steps.branch.outputs.result).feature }}
