@@ -30,11 +30,11 @@ jobs:
             console.log(feature)            
             return feature
 
-      - run: export TF_WORKSPACE="${{ steps.branch.outputs.result }}"
+      - run: export TF_WORKSPACE=${{ steps.branch.outputs.result }}
 
       - name: 🛠 Initialize Terraform
         working-directory: ./aws/feature
-        run: terraform init -input=false
+        run: terraform init
 
       - name: 🏗 Destruction Infrastructure
         id: terraform_apply
