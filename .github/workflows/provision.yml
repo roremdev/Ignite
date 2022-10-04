@@ -72,10 +72,6 @@ jobs:
         run: |
           terraform init
           terraform workspace new ${{ needs.reference.outputs.workspace }}
-          terraform plan -input=false \
-            -var="env_branch=${{ needs.reference.outputs.branch }}" \
-            -var="env_feature=${{ needs.reference.outputs.workspace }}" \
-            -var="app_id=${{ secrets.APP_ID }}"
           terraform apply -auto-approve \
             -var="env_branch=${{ needs.reference.outputs.branch }}" \
             -var="env_feature=${{ needs.reference.outputs.workspace }}" \
