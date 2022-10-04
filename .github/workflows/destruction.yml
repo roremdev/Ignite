@@ -35,26 +35,25 @@ jobs:
         working-directory: aws/feature
 
     steps:
-      - run: echo ${{ needs.reference.outputs.workspace }} ${{ secrets.APP_ID }}
-#      - name: ⚙️ Configure GitHub Actions
-#        uses: actions/checkout@v3
-#
-#      - name: ⚙️ Configure Terraform
-#        uses: hashicorp/setup-terraform@v2
-#        with:
-#          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-#
-#      - name: 🚧 Defining environment context
-#        run: |
-#          mkdir .terraform
-#          cd .terraform
-#          echo ${{ needs.reference.outputs.workspace }} >> environment
-#
-#      - name: 🛠 Terraform operations
-#        working-directory: ./aws/feature
-#        run: |
-#          terraform init
-#          terraform destroy -auto-approve
+      - name: ⚙️ Configure GitHub Actions
+        uses: actions/checkout@v3
+
+      - name: ⚙️ Configure Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: 🚧 Defining environment context
+        run: |
+          mkdir .terraform
+          cd .terraform
+          echo ${{ needs.reference.outputs.workspace }} >> environment
+
+      - name: 🛠 Terraform operations
+        working-directory: ./aws/feature
+        run: |
+          terraform init
+          terraform destroy -auto-approve
 #           -var="app_id=${{ steps.terraform_output.outputs.stdout }}"
 #         terraform workspace select development
 #         terraform workspace delete ${{ fromJSON(steps.branch.outputs.result).feature }}
