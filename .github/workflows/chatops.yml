@@ -14,5 +14,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           reactions: false
           commands: |
-            actions
+            help
             provision

@@ -1,7 +1,7 @@
-name: Actions
+name: "Commands"
 on:
   repository_dispatch:
-    types: [actions-command]
+    types: [help-command]
 jobs:
   help:
     runs-on: ubuntu-latest
@@ -14,6 +14,6 @@ jobs:
           reaction-type: laugh
           body: |
             #### 📖 Commands on ChatOps
-            > | Command              | Description
-            > | -------------------- | -------------------------------------------- 
-            > | `/provision app_id=` | Provision infrastructure on an environment specified.
+            > | Command      | Description
+            > | ------------ | -------------------------------------------- 
+            > | `/provision` | Provision infrastructure on the current issue.
