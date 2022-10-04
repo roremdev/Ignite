@@ -19,7 +19,6 @@ data "aws_iam_policy_document" "amplify" {
 }
 
 resource "aws_iam_role" "amplify" {
-  #  name               = "${var.project}-${var.env_feature}"
   name               = "amplify"
   assume_role_policy = data.aws_iam_policy_document.amplify.json
 }

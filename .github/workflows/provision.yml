@@ -42,13 +42,17 @@ jobs:
 
       - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
 
-  terraform:
+  prepare:
     runs-on: ubuntu-latest
     needs: [ reference ]
-    environment: Amplify
+    continue-on-error: true
+
     defaults:
       run:
         working-directory: aws/feature
+
+    outputs:
+      init: ${{ steps.terraform_init.outcome }}
 
     steps:
       - name: ⚙️ Configure GitHub Actions
@@ -72,17 +76,41 @@ jobs:
           cd .terraform
           echo development >> environment
 
-      - name: 🛠 Terraform operations
-        id: terraform
-        working-directory: ./aws/feature
+      - name: 🛠 Terraform workspace
+        id: terraform_init
         run: |
           terraform init
           terraform workspace new ${{ needs.reference.outputs.workspace }}
+
+  provision:
+    runs-on: ubuntu-latest
+    needs: [ prepare ]
+    environment: Amplify
+
+    defaults:
+      run:
+        working-directory: aws/feature
+
+    if: ${{ needs.prepare.outputs.init }} == 'success'
+    steps:
+      - name: 🛠 Terraform operations
+        id: terraform_apply
+        run: |
           terraform apply -auto-approve \
             -var="env_branch=${{ needs.reference.outputs.branch }}" \
             -var="env_feature=${{ needs.reference.outputs.workspace }}" \
             -var="app_id=${{ secrets.APP_ID }}"
 
+  result:
+    runs-on: ubuntu-latest
+    needs: [ prepare ]
+    environment: Amplify
+
+    defaults:
+      run:
+        working-directory: aws/feature
+
+    steps:
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
         with:
@@ -91,4 +119,5 @@ jobs:
           reaction-type: rocket
           body: |
             🏗 Feature **${{ needs.reference.outputs.workspace }}** on **${{ needs.reference.outputs.branch }}**
-            🚧 Terraform finished `${{ steps.terraform.outcome }}`
+            🚧 Terraform init completed `${{ jobs.prepare.outputs.init }}`
+            🚧 Terraform apply completed `${{ needs.provision.outcome }}`
