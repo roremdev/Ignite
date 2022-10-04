@@ -72,6 +72,7 @@ jobs:
 
       - name: 🚧 Defining environment context
         run: |
+          ls -al
           mkdir .terraform
           cd .terraform
           echo development >> environment
