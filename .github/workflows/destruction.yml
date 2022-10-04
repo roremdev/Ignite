@@ -30,7 +30,9 @@ jobs:
             console.log(feature)            
             return feature
 
-      - run: export TF_WORKSPACE=${{ steps.branch.outputs.result }}
+      - name: ♻️ Workspace
+        working-directory: ./aws/feature
+        run: terraform workspace select ${{ steps.branch.outputs.result }}
 
       - name: 🛠 Initialize Terraform
         working-directory: ./aws/feature
