@@ -10,6 +10,7 @@ jobs:
 
     outputs:
       workspace: ${{ steps.feature.outputs.result }}
+      branch: ${{ steps.branch.outputs.result }}
 
     steps:
       - name: ✍️ Name of workspace
@@ -20,40 +21,54 @@ jobs:
         with:
           result-encoding: string
           script: |
-            console.log(process.env.ISSUE_TITLE)
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
             return kebabCase(process.env.ISSUE_TITLE)
 
-      - run: echo ${{ steps.feature.outputs.result }}
-
-  terraform:
-    runs-on: ubuntu-latest
-    needs: [ reference ]
-    environment: Amplify
-    defaults:
-      run:
-        working-directory: aws/feature
-
-    steps:
-      - name: ⚙️ Configure GitHub Actions
-        uses: actions/checkout@v3
-
-      - name: ⚙️ Configure Terraform
-        uses: hashicorp/setup-terraform@v2
+      - name: ✍️ Name of branch
+        uses: actions/github-script@v6
+        id: branch
+        env:
+          ISSUE_LABELS: ${{ github.event.issue.labels }}
         with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          script: |
+            const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
+            const labels = JSON.parse(process.env.ISSUE_LABELS)
+            console.log(labels)
+            const label = labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
+            return `${label.name}/issue-${issue.number}/${feature}`
 
-      - name: 🚧 Defining environment context
-        run: |
-          mkdir .terraform
-          cd .terraform
-          echo ${{ needs.reference.outputs.workspace }} >> environment
+      - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
 
-      - name: 🛠 Terraform operations
-        working-directory: ./aws/feature
-        run: |
-          terraform init
-          terraform destroy -auto-approve
-#           -var="app_id=${{ steps.terraform_output.outputs.stdout }}"
+#  terraform:
+#    runs-on: ubuntu-latest
+#    needs: [ reference ]
+#    environment: Amplify
+#    defaults:
+#      run:
+#        working-directory: aws/feature
+#
+#    steps:
+#      - name: ⚙️ Configure GitHub Actions
+#        uses: actions/checkout@v3
+#
+#      - name: ⚙️ Configure Terraform
+#        uses: hashicorp/setup-terraform@v2
+#        with:
+#          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+#
+#      - name: 🚧 Defining environment context
+#        run: |
+#          mkdir .terraform
+#          cd .terraform
+#          echo ${{ needs.reference.outputs.workspace }} >> environment
+#
+#      - name: 🛠 Terraform operations
+#        working-directory: ./aws/feature
+#        run: |
+#          terraform init
+#          terraform destroy -auto-approve \
+#            -var="env_branch=${{ fromJSON(steps.branch.outputs.result).branch }}" \
+#            -var="env_feature=${{ fromJSON(steps.branch.outputs.result).feature }}" \
+#            -var="app_id=${{ steps.terraform_output.outputs.stdout }}"
 #         terraform workspace select development
 #         terraform workspace delete ${{ fromJSON(steps.branch.outputs.result).feature }}
