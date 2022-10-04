@@ -32,7 +32,7 @@ resource "aws_amplify_app" "application" {
 
   iam_service_role_arn = aws_iam_role.amplify.arn
 
-  enable_auto_branch_creation = true
+#  enable_auto_branch_creation = true
   enable_branch_auto_build    = true
   enable_branch_auto_deletion = true
   platform                    = "WEB"
