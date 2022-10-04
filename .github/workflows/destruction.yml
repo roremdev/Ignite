@@ -40,11 +40,17 @@ jobs:
         working-directory: ./aws/feature
         run: terraform init
 
+      - name: 🛠 Initialize Terraform
+        id: terraform_output
+        working-directory: ./aws/feature
+        run: terraform output amplify_id
+
       - name: 🏗 Destruction Infrastructure
         id: terraform_apply
         working-directory: ./aws/feature
         run: |
-          terraform destroy -auto-approve
+          terraform destroy -auto-approve \
+          -var="app_id=${{ steps.terraform_output.outputs.stdout }}"
 
       - name: ♻️ Workspace
         working-directory: ./aws/feature
