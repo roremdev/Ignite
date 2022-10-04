@@ -30,24 +30,26 @@ jobs:
             console.log(feature)            
             return feature
 
-      - name: ♻️ Workspace
-        working-directory: ./aws/feature
-        run: terraform workspace select ${{ steps.branch.outputs.result }}
+      - working-directory: ./aws/feature
+        run: |
+          mkdir .terraform
+          cd .terraform
+          echo ${{ steps.branch.outputs.result }} >> environment
 
       - name: 🛠 Initialize Terraform
         working-directory: ./aws/feature
         run: terraform init
 
-      - name: 🏗 Destruction Infrastructure
-        id: terraform_apply
-        working-directory: ./aws/feature
-        run: |
-          terraform destroy -auto-approve
-
-      - name: ♻️ Workspace
-        working-directory: ./aws/feature
-        run: terraform workspace select development
-
-      - name: ♻️ Workspace
-        working-directory: ./aws/feature
-        run: terraform workspace delete ${{ fromJSON(steps.branch.outputs.result).feature }}
+#      - name: 🏗 Destruction Infrastructure
+#        id: terraform_apply
+#        working-directory: ./aws/feature
+#        run: |
+#          terraform destroy -auto-approve
+#
+#      - name: ♻️ Workspace
+#        working-directory: ./aws/feature
+#        run: terraform workspace select development
+#
+#      - name: ♻️ Workspace
+#        working-directory: ./aws/feature
+#        run: terraform workspace delete ${{ fromJSON(steps.branch.outputs.result).feature }}
