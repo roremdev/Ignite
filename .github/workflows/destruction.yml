@@ -22,21 +22,13 @@ jobs:
         env:
           ISSUE: ${{ toJson(github.event.issue) }}
         with:
+          result-encoding: string
           script: |
             const issue = JSON.parse(process.env.ISSUE);
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
-            const feature = kebabCase(issue.title)
-            const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
-            
-            console.log({
-              branch: `${label.name}/issue-${issue.number}/${feature}`,
-              feature
-            })
-            
-            return {
-              branch: `${label.name}/issue-${issue.number}/${feature}`,
-              feature
-            }
+            const feature = kebabCase(issue.title)            
+            console.log(feature)            
+            return feature
 
       - name: 🛠 Initialize Terraform
         working-directory: ./aws/feature
@@ -44,7 +36,7 @@ jobs:
 
       - name: ♻️ Workspace
         working-directory: ./aws/feature
-        run: terraform workspace select ${{ fromJSON(steps.branch.outputs.result).feature }}
+        run: terraform workspace select ${{ steps.branch.outputs.result }}
 
       - name: 🏗 Destruction Infrastructure
         id: terraform_apply
