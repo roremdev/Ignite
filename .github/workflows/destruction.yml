@@ -12,19 +12,24 @@ jobs:
   reference:
     runs-on: ubuntu-latest
 
-    outputs:
-      workspace: ${{ steps.feature.outputs.result }}
+#    outputs:
+#      workspace: ${{ steps.feature.outputs.result }}
 
     steps:
-      - name: ✍️ Name of workspace
-        uses: actions/github-script@v6
-        id: feature
-        env:
-          ISSUE_TITLE: ${{ fromJSON(github.event.issue).title }}
-        with:
-          result-encoding: string
-          script: |
-            console.log(process.env.ISSUE_TITLE)
+      - id: issue
+        run: echo "::set-output name=title::${{ fromJSON(github.event.issue).title }}"
+
+      - run: echo ${{ steps.issue.outputs.title }}
+
+#      - name: ✍️ Name of workspace
+#        uses: actions/github-script@v6
+#        id: feature
+#        env:
+#          ISSUE_TITLE: ${{ fromJSON(github.event.issue).title }}
+#        with:
+#          result-encoding: string
+#          script: |
+#            console.log(process.env.ISSUE_TITLE)
 #            const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
 #            return kebabCase(JSON.parse(process.env.ISSUE_TITLE))
 
