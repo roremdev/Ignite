@@ -8,9 +8,6 @@ jobs:
   reference:
     runs-on: ubuntu-latest
 
-    env:
-      ISSUE: ${{ toJSON(github.event.issue) }}
-
     outputs:
       workspace: ${{ steps.feature.outputs.result }}
       branch: ${{ steps.branch.outputs.result }}
@@ -20,7 +17,7 @@ jobs:
         uses: actions/github-script@v6
         id: feature
         env:
-          ISSUE_TITLE: ${{ fromJSON(env.ISSUE).title }}
+          ISSUE_TITLE: ${{ fromJSON(github.event.issue).title }}
         with:
           result-encoding: string
           script: |
@@ -31,11 +28,11 @@ jobs:
         uses: actions/github-script@v6
         id: branch
         env:
-          ISSUE_LABELS: ${{ fromJSON(env.ISSUE).labels }}
+          ISSUE: ${{ toJSON(github.event.issue) }}
         with:
           result-encoding: string
           script: |
-            console.log(process.env.ISSUE_LABELS)
+            console.log(JSON.parse(process.env.ISSUE).labels)
 
 #      - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
 
