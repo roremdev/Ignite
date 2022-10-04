@@ -86,22 +86,31 @@ jobs:
 
       - run: echo  ${{ steps.terraform_init.outcome }}
 
+      - name: 📦 Upload directory
+        if: ${{ steps.terraform_init.outcome == 'success' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: terraform
+          path: .
+
   provision:
     runs-on: ubuntu-latest
     needs: [ reference, prepare ]
     environment: Amplify
 
-    defaults:
-      run:
-        working-directory: aws/feature
-
     outputs:
       apply: ${{ steps.terraform_apply.outcome }}
 
+    if: ${{ needs.prepare.outputs.init == 'success' }}
     steps:
-      - run: echo ${{ needs.prepare.outputs.init }}
+      - name: 📦 Download directory
+        uses: actions/download-artifact@v3
+        with:
+          name: terraform
+
+      - run: ls -al
+
       - name: 🛠 Terraform operations
-        if: ${{ needs.prepare.outputs.init == 'success' }}
         id: terraform_apply
         run: |
           terraform apply -auto-approve \
@@ -109,25 +118,19 @@ jobs:
             -var="env_feature=${{ needs.reference.outputs.workspace }}" \
             -var="app_id=${{ secrets.APP_ID }}"
 
-      - run: echo  ${{ steps.terraform_apply.outcome }}
-
-  result:
-    runs-on: ubuntu-latest
-    needs: [ prepare, provision ]
-    environment: Amplify
-
-    defaults:
-      run:
-        working-directory: aws/feature
-
-    steps:
-      - name: 🤖 Bot comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
-          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
-          reaction-type: rocket
-          body: |
-            🏗 Feature **${{ needs.reference.outputs.workspace }}** on **${{ needs.reference.outputs.branch }}**
-            🚧 Terraform init completed `${{ needs.prepare.outputs.init }}`
-            🚧 Terraform apply completed `${{ needs.provision.outputs.apply }}`
+#  result:
+#    runs-on: ubuntu-latest
+#    needs: [ prepare, provision ]
+#    environment: Amplify
+#
+#    steps:
+#      - name: 🤖 Bot comment
+#        uses: peter-evans/create-or-update-comment@v2
+#        with:
+#          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+#          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+#          reaction-type: rocket
+#          body: |
+#            🏗 Feature **${{ needs.reference.outputs.workspace }}** on **${{ needs.reference.outputs.branch }}**
+#            🚧 Terraform init completed `${{ needs.prepare.outputs.init }}`
+#            🚧 Terraform apply completed `${{ needs.provision.outputs.apply }}`
