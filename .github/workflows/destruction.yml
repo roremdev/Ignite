@@ -38,13 +38,13 @@ jobs:
               feature
             }
 
-      - name: ♻️ Workspace
-        working-directory: ./aws/feature
-        run: terraform workspace select ${{ fromJSON(steps.branch.outputs.result).feature }}
-
       - name: 🛠 Initialize Terraform
         working-directory: ./aws/feature
         run: terraform init
+
+      - name: ♻️ Workspace
+        working-directory: ./aws/feature
+        run: terraform workspace select ${{ fromJSON(steps.branch.outputs.result).feature }}
 
       - name: 🏗 Destruction Infrastructure
         id: terraform_apply
