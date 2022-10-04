@@ -65,13 +65,13 @@ jobs:
           cd .terraform
           echo ${{ needs.reference.outputs.workspace }} >> environment
 
-#      - name: 🛠 Terraform operations
-#        working-directory: ./aws/feature
-#        run: |
-#          terraform init
-#          terraform destroy -auto-approve \
-#            -var="env_branch=${{ needs.reference.outputs.branch }}" \
-#            -var="env_feature=${{ needs.reference.outputs.workspace }}" \
-#            -var="app_id=${{ secrets.APP_ID }}"
-#         terraform workspace select development
-#         terraform workspace delete ${{ needs.reference.outputs.workspace }}
+      - name: 🛠 Terraform operations
+        working-directory: ./aws/feature
+        run: |
+          terraform init
+          terraform destroy -auto-approve \
+            -var="env_branch=${{ needs.reference.outputs.branch }}" \
+            -var="env_feature=${{ needs.reference.outputs.workspace }}" \
+            -var="app_id=${{ secrets.APP_ID }}"
+          terraform workspace select development
+          terraform workspace delete ${{ needs.reference.outputs.workspace }}
