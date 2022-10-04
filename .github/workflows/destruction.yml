@@ -8,6 +8,9 @@ jobs:
   reference:
     runs-on: ubuntu-latest
 
+    env:
+      ISSUE: ${{ toJSON(github.event.issue) }}
+
     outputs:
       workspace: ${{ steps.feature.outputs.result }}
       branch: ${{ steps.branch.outputs.result }}
@@ -17,24 +20,27 @@ jobs:
         uses: actions/github-script@v6
         id: feature
         env:
-          ISSUE_TITLE: ${{ toJSON(github.event.issue).title }}
+          ISSUE: ${{ toJSON(github.event.issue) }}
         with:
           result-encoding: string
           script: |
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
-            return kebabCase(process.env.ISSUE_TITLE)
+            return kebabCase(JSON.parse(process.env.ISSUE).title)
 
       - name: ✍️ Name of branch
         uses: actions/github-script@v6
         id: branch
         env:
           ISSUE: ${{ toJSON(github.event.issue) }}
+          FEATURE: ${{ steps.feature.outputs.result }}
         with:
           result-encoding: string
           script: |
-            console.log(JSON.parse(process.env.ISSUE).labels)
+            const issue = JSON.parse(process.env.ISSUE)
+            const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
+            return `${label.name}/issue-${issue.number}/${process.env.FEATURE}`
 
-#      - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
+      - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
 
 #  terraform:
 #    runs-on: ubuntu-latest
