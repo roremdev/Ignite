@@ -16,10 +16,10 @@ jobs:
 #      workspace: ${{ steps.feature.outputs.result }}
 
     steps:
-      - id: issue
-        run: echo "::set-output name=title::${{ fromJSON(github.event.issue).title }}"
+#      - id: issue
+#        run: echo "::set-output name=title::${{ github.event.issue.title }}"
 
-      - run: echo ${{ steps.issue.outputs.title }}
+      - run: echo ${{ github.event.issue.title }}
 
 #      - name: ✍️ Name of workspace
 #        uses: actions/github-script@v6
