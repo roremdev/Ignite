@@ -34,7 +34,7 @@ jobs:
 
       - name: 🛠 Initialize Terraform
         working-directory: ./aws/feature
-        run: terraform init
+        run: terraform init -input=false
 
       - name: 🏗 Destruction Infrastructure
         id: terraform_apply
