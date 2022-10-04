@@ -20,7 +20,7 @@ jobs:
         uses: actions/github-script@v6
         id: feature
         env:
-          ISSUE: ${{ toJSON(github.event.issue) }}
+          ISSUE: ${{ env.ISSUE }}
         with:
           result-encoding: string
           script: |
@@ -31,7 +31,7 @@ jobs:
         uses: actions/github-script@v6
         id: branch
         env:
-          ISSUE: ${{ toJSON(github.event.issue) }}
+          ISSUE: ${{ env.ISSUE }}
           FEATURE: ${{ steps.feature.outputs.result }}
         with:
           result-encoding: string
@@ -39,6 +39,8 @@ jobs:
             const issue = JSON.parse(process.env.ISSUE)
             const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
             return `${label.name}/issue-${issue.number}/${process.env.FEATURE}`
+
+      - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
 
   terraform:
     runs-on: ubuntu-latest
