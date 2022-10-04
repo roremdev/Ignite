@@ -118,19 +118,19 @@ jobs:
             -var="env_feature=${{ needs.reference.outputs.workspace }}" \
             -var="app_id=${{ secrets.APP_ID }}"
 
-#  result:
-#    runs-on: ubuntu-latest
-#    needs: [ prepare, provision ]
-#    environment: Amplify
-#
-#    steps:
-#      - name: 🤖 Bot comment
-#        uses: peter-evans/create-or-update-comment@v2
-#        with:
-#          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
-#          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
-#          reaction-type: rocket
-#          body: |
-#            🏗 Feature **${{ needs.reference.outputs.workspace }}** on **${{ needs.reference.outputs.branch }}**
-#            🚧 Terraform init completed `${{ needs.prepare.outputs.init }}`
-#            🚧 Terraform apply completed `${{ needs.provision.outputs.apply }}`
+  result:
+    runs-on: ubuntu-latest
+    needs: [ prepare, provision ]
+    environment: Amplify
+
+    steps:
+      - name: 🤖 Bot comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          reaction-type: rocket
+          body: |
+            🏗 Feature **${{ needs.reference.outputs.workspace }}** on **${{ needs.reference.outputs.branch }}**
+            🚧 Terraform init completed `${{ needs.prepare.outputs.init }}`
+            🚧 Terraform apply completed `${{ needs.provision.outputs.apply }}`
