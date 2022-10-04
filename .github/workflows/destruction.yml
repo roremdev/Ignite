@@ -24,17 +24,15 @@ jobs:
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
             return kebabCase(process.env.ISSUE_TITLE)
 
-      - run: echo ${{ github.event.issue }}
-
-#      - name: ✍️ Name of branch
-#        uses: actions/github-script@v6
-#        id: branch
-#        env:
-#          ISSUE_LABELS: ${{ github.event.issue }}
-#        with:
-#          result-encoding: string
-#          script: |
-#            console.log(process.env.ISSUE_LABELS)
+      - name: ✍️ Name of branch
+        uses: actions/github-script@v6
+        id: branch
+        env:
+          ISSUE_LABELS: ${{ toJson(github.event.issue) }}
+        with:
+          result-encoding: string
+          script: |
+            console.log(process.env.ISSUE_LABELS)
 
 #      - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
 
