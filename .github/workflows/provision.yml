@@ -66,6 +66,12 @@ jobs:
         with:
           branch: ${{ needs.reference.outputs.branch }}
 
+      - name: 🚧 Defining environment context
+        run: |
+          mkdir .terraform
+          cd .terraform
+          echo development >> environment
+
       - name: 🛠 Terraform operations
         id: terraform
         working-directory: ./aws/feature
