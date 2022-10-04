@@ -6,32 +6,29 @@ on:
 
 defaults:
   run:
-    working-directory: ./aws/feature
+    working-directory: aws/feature
 
 jobs:
   reference:
     runs-on: ubuntu-latest
 
-#    outputs:
-#      workspace: ${{ steps.feature.outputs.result }}
+    outputs:
+      workspace: ${{ steps.feature.outputs.result }}
 
     steps:
-#      - id: issue
-#        run: echo "::set-output name=title::${{ github.event.issue.title }}"
+      - name: ✍️ Name of workspace
+        uses: actions/github-script@v6
+        id: feature
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        with:
+          result-encoding: string
+          script: |
+            console.log(process.env.ISSUE_TITLE)
+            const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
+            return kebabCase(process.env.ISSUE_TITLE)
 
-      - run: echo ${{ github.event.issue.title }}
-
-#      - name: ✍️ Name of workspace
-#        uses: actions/github-script@v6
-#        id: feature
-#        env:
-#          ISSUE_TITLE: ${{ fromJSON(github.event.issue).title }}
-#        with:
-#          result-encoding: string
-#          script: |
-#            console.log(process.env.ISSUE_TITLE)
-#            const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
-#            return kebabCase(JSON.parse(process.env.ISSUE_TITLE))
+      - run: echo ${{ steps.feature.outputs.result }}
 
 #  terraform:
 #    runs-on: ubuntu-latest
