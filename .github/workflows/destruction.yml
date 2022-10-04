@@ -17,7 +17,7 @@ jobs:
         uses: actions/github-script@v6
         id: feature
         env:
-          ISSUE_TITLE: ${{ fromJSON(github.event.issue).title }}
+          ISSUE_TITLE: ${{ toJSON(github.event.issue).title }}
         with:
           result-encoding: string
           script: |
