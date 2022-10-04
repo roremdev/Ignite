@@ -54,21 +54,16 @@ jobs:
       - name: ⚙️ Configure GitHub Actions
         uses: actions/checkout@v3
 
-      - run: |
-          echo ${{ needs.reference.outputs.workspace }}
-          echo ${{ needs.reference.outputs.branch }}
-          echo ${{ secrets.APP_ID }}
+      - name: ⚙️ Configure Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-#      - name: ⚙️ Configure Terraform
-#        uses: hashicorp/setup-terraform@v2
-#        with:
-#          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-#
-#      - name: 🚧 Defining environment context
-#        run: |
-#          mkdir .terraform
-#          cd .terraform
-#          echo ${{ needs.reference.outputs.workspace }} >> environment
+      - name: 🚧 Defining environment context
+        run: |
+          mkdir .terraform
+          cd .terraform
+          echo ${{ needs.reference.outputs.workspace }} >> environment
 
 #      - name: 🛠 Terraform operations
 #        working-directory: ./aws/feature
