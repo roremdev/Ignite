@@ -54,24 +54,29 @@ jobs:
       - name: ⚙️ Configure GitHub Actions
         uses: actions/checkout@v3
 
-      - name: ⚙️ Configure Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - run: |
+          echo ${{ needs.reference.outputs.workspace }}
+          echo ${{ needs.reference.outputs.branch }}
+          echo ${{ secrets.APP_ID }}
 
-      - name: 🚧 Defining environment context
-        run: |
-          mkdir .terraform
-          cd .terraform
-          echo ${{ needs.reference.outputs.workspace }} >> environment
+#      - name: ⚙️ Configure Terraform
+#        uses: hashicorp/setup-terraform@v2
+#        with:
+#          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+#
+#      - name: 🚧 Defining environment context
+#        run: |
+#          mkdir .terraform
+#          cd .terraform
+#          echo ${{ needs.reference.outputs.workspace }} >> environment
 
-      - name: 🛠 Terraform operations
-        working-directory: ./aws/feature
-        run: |
-          terraform init
-          terraform destroy -auto-approve \
-            -var="env_branch=${{ needs.reference.outputs.branch }}" \
-            -var="env_feature=${{ needs.reference.outputs.workspace }}" \
-            -var="app_id=${{ secrets.APP_ID }}"
-         terraform workspace select development
-         terraform workspace delete ${{ needs.reference.outputs.workspace }}
+#      - name: 🛠 Terraform operations
+#        working-directory: ./aws/feature
+#        run: |
+#          terraform init
+#          terraform destroy -auto-approve \
+#            -var="env_branch=${{ needs.reference.outputs.branch }}" \
+#            -var="env_feature=${{ needs.reference.outputs.workspace }}" \
+#            -var="app_id=${{ secrets.APP_ID }}"
+#         terraform workspace select development
+#         terraform workspace delete ${{ needs.reference.outputs.workspace }}
