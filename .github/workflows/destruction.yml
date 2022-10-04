@@ -24,4 +24,24 @@ jobs:
         with:
           script: |
             const issue = JSON.parse(process.env.ISSUE);
-            console.log(issue)
+            const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
+            const feature = kebabCase(issue.title)
+            const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
+            return {
+              branch: `${label.name}/issue-${issue.number}/${feature}`,
+              feature
+            }
+
+      - name: 🛠 Initialize Terraform
+        working-directory: ./aws/feature
+        run: terraform init
+
+      - name: ♻️ Workspace
+        working-directory: ./aws/feature
+        run: terraform workspace select ${{ fromJSON(steps.branch.outputs.result).feature }}
+
+      - name: 🏗 Destruction Infrastructure
+        id: terraform_apply
+        working-directory: ./aws/feature
+        run: |
+          terraform destroy -auto-approve
