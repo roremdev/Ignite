@@ -27,6 +27,12 @@ jobs:
             const kebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
             const feature = kebabCase(issue.title)
             const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
+            
+            console.log({
+              branch: `${label.name}/issue-${issue.number}/${feature}`,
+              feature
+            })
+            
             return {
               branch: `${label.name}/issue-${issue.number}/${feature}`,
               feature
@@ -45,3 +51,11 @@ jobs:
         working-directory: ./aws/feature
         run: |
           terraform destroy -auto-approve
+
+      - name: ♻️ Workspace
+        working-directory: ./aws/feature
+        run: terraform workspace select default
+
+      - name: ♻️ Workspace
+        working-directory: ./aws/feature
+        run: terraform workspace delete ${{ fromJSON(steps.branch.outputs.result).feature }}
