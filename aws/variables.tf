@@ -11,10 +11,10 @@ variable "project" {
   default     = "ignite"
 }
 
-variable "app_id" {
-  description = "AWS Amplify id"
-  default     = null
-}
+#variable "app_id" {
+#  description = "AWS Amplify id"
+#  default     = null
+#}
 
 variable "gh_repository" {
   description = "Github repository"
