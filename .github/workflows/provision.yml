@@ -42,6 +42,15 @@ jobs:
 
       - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
 
+      - name: 🤖 Bot comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          reaction-type: rocket
+          body: |
+            🏗 Feature **${{ needs.reference.outputs.workspace }}** on **${{ needs.reference.outputs.branch }}**
+
   prepare:
     runs-on: ubuntu-latest
     needs: [ reference ]
@@ -72,7 +81,6 @@ jobs:
 
       - name: 🚧 Defining environment context
         run: |
-          ls -al
           mkdir .terraform
           cd .terraform
           echo development >> environment
@@ -98,8 +106,7 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
           body: |
-            🏗 Feature **${{ needs.reference.outputs.workspace }}** on **${{ needs.reference.outputs.branch }}**
-            🚧 Terraform init completed `${{ steps.terraform_init.outcome }}`
+              - 🚧 Terraform init `${{ steps.terraform_init.outcome == 'success' && 'applied' || 're-used' }}`
 
   provision:
     runs-on: ubuntu-latest
@@ -132,7 +139,7 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
           body: |
-            🚧 Terraform apply completed `${{ steps.terraform_apply.outcome }}`
+              - 🚧 Terraform apply completed `${{ steps.terraform_apply.outcome == 'success' && 'applied' || 'no-changes' }}`
 
 #  result:
 #    runs-on: ubuntu-latest
