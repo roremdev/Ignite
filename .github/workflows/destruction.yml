@@ -87,7 +87,7 @@ jobs:
 
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
-#        if: ${{ steps.terraform_init.outcome == 'success' }}
+        if: ${{ steps.terraform_init.outcome == 'success' }}
         with:
           issue-number: ${{ fromJSON(env.ISSUE).number }}
           reaction-type: rocket
