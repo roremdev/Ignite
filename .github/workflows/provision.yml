@@ -121,22 +121,20 @@ jobs:
         with:
           name: terraform
 
-      - run: ls -al
+      - name: 🛠 Terraform operations
+        if: ${{ needs.prepare.outputs.init == 'success' }}
+        id: terraform_apply
+        run: |
+          terraform apply -auto-approve \
+            -var="env_branch=${{ needs.reference.outputs.branch }}" \
+            -var="env_feature=${{ needs.reference.outputs.workspace }}" \
+            -var="app_id=${{ secrets.APP_ID }}"
 
-#      - name: 🛠 Terraform operations
-#        if: ${{ needs.prepare.outputs.init == 'success' }}
-#        id: terraform_apply
-#        run: |
-#          terraform apply -auto-approve \
-#            -var="env_branch=${{ needs.reference.outputs.branch }}" \
-#            -var="env_feature=${{ needs.reference.outputs.workspace }}" \
-#            -var="app_id=${{ secrets.APP_ID }}"
-#
-#      - name: 🤖 Bot comment
-#        uses: peter-evans/create-or-update-comment@v2
-#        with:
-#          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
-#          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
-#          reaction-type: rocket
-#          body: |
-#              - 🚧 Terraform apply `${{ steps.terraform_apply.outcome == 'success' && 'completed' || 'no-changes' }}`
+      - name: 🤖 Bot comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          reaction-type: rocket
+          body: |
+              - 🚧 Terraform apply `${{ steps.terraform_apply.outcome == 'success' && 'completed' || 'no-changes' }}`
