@@ -40,15 +40,6 @@ jobs:
             const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
             return `${label.name}/issue-${issue.number}/${process.env.FEATURE}`
 
-      - name: 🤖 Bot comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
-          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
-          reaction-type: rocket
-          body: |
-            🏗 Provision **${{ steps.feature.outputs.result }}** on **${{ steps.branch.outputs.result }}**
-
   provision:
     runs-on: ubuntu-latest
     needs: [ reference ]
@@ -107,5 +98,6 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
           body: |
+            🏗 Provision **${{ needs.reference.outputs.workspace }}** on **${{ needs.reference.outputs.branch }}**
               - 🚧 Terraform init `${{ steps.terraform_init.outcome == 'success' && 'completed' || 're-used' }}`
               - 🚧 Terraform apply `${{ steps.terraform_apply.outcome == 'success' && 'completed' || 'no-changes' }}`
