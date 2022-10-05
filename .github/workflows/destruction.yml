@@ -40,8 +40,6 @@ jobs:
             const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
             return `${label.name}/issue-${issue.number}/${process.env.FEATURE}`
 
-      - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
-
   terraform:
     runs-on: ubuntu-latest
     needs: [ reference ]

@@ -38,9 +38,7 @@ jobs:
           script: |
             const issue = JSON.parse(process.env.ISSUE)
             const label = issue.labels.find(({name}) => name === 'feat' || name === 'refactor' || name === 'fix')
-            return `${label.name}/issue-${issue.number}/${process.env.FEATURE}`  
-
-      - run: echo ${{ steps.feature.outputs.result }} ${{ steps.branch.outputs.result }}
+            return `${label.name}/issue-${issue.number}/${process.env.FEATURE}`
 
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
@@ -49,7 +47,7 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
           body: |
-            🏗 Feature **${{ needs.reference.outputs.workspace }}** on **${{ needs.reference.outputs.branch }}**
+            🏗 Feature **${{ steps.feature.outputs.result }}** on **${{ steps.branch.outputs.result }}**
 
   prepare:
     runs-on: ubuntu-latest
