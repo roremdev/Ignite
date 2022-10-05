@@ -84,9 +84,9 @@ jobs:
 
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
+#        if: ${{ steps.terraform_init.outcome == 'success' }}
         with:
-          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
-          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          issue-number: ${{ env.ISSUE.number }}
           reaction-type: rocket
           body: |
-            - 🚧 Terraform destroy `${{ steps.terraform_destroy.outcome == 'success' && 'completed' || 'no-action' }}`
+            - 🚧 Terraform destroy `completed`
