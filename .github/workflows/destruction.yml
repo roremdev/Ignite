@@ -92,4 +92,4 @@ jobs:
           issue-number: ${{ fromJSON(env.ISSUE).number }}
           reaction-type: rocket
           body: |
-            - 🚧 Terraform destroy `completed`
+            🚧 Terraform destroy `completed`
