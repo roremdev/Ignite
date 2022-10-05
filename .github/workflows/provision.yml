@@ -95,7 +95,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: terraform
-          path: .
+          path: ./aws/feature
 
       - name: 🤖 Bot comment
         uses: peter-evans/create-or-update-comment@v2
