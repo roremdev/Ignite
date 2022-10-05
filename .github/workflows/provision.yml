@@ -47,7 +47,7 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
           body: |
-            🏗 Feature **${{ steps.feature.outputs.result }}** on **${{ steps.branch.outputs.result }}**
+            🏗 Provision **${{ steps.feature.outputs.result }}** on **${{ steps.branch.outputs.result }}**
 
   prepare:
     runs-on: ubuntu-latest
@@ -104,7 +104,7 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
           body: |
-              - 🚧 Terraform init `${{ steps.terraform_init.outcome == 'success' && 'applied' || 're-used' }}`
+              - 🚧 Terraform init `${{ steps.terraform_init.outcome == 'success' && 'completed' || 're-used' }}`
 
   provision:
     runs-on: ubuntu-latest
@@ -137,7 +137,7 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
           body: |
-              - 🚧 Terraform apply completed `${{ steps.terraform_apply.outcome == 'success' && 'applied' || 'no-changes' }}`
+              - 🚧 Terraform apply `${{ steps.terraform_apply.outcome == 'success' && 'completed' || 'no-changes' }}`
 
 #  result:
 #    runs-on: ubuntu-latest
